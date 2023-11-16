@@ -5,6 +5,8 @@
 #include "GameFramework/Character.h"
 #include "Components/SphereComponent.h"
 #include "MyCharacter.h"
+#include "TrainerComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -24,9 +26,9 @@ AItem::AItem()
     //// Register the sphere component so it is updated and rendered
     //SphereComponent->RegisterComponent();
 
-	USphereComponent* CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("RootComponent"));
-	RootComponent = CollisionComponent;
+	USphereComponent* CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	CollisionComponent->InitSphereRadius(40.0f);
+	CollisionComponent->SetupAttachment(RootComponent);
 	CollisionComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	CollisionComponent->SetGenerateOverlapEvents(true); // Enable overlap events
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnOverlapBegin);
@@ -48,15 +50,15 @@ void AItem::Tick(float DeltaTime)
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor) {
+	if (OtherActor) 
+	{
 		AMyCharacter* character = Cast<AMyCharacter>(OtherActor);
+
 		if (character)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Started"));
-			//this->targetMovementComponent = character->GetCharacterMovement();
-			//Activate();
-			// This code will be executed when the actor overlaps with another actor
-			// You can implement your logic here.
+			character->TrainerComponent->PickupItem(this);
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, UKismetSystemLibrary::GetDisplayName(this));
+
 		}
 	}
 }

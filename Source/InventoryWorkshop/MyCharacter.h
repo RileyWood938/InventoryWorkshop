@@ -11,6 +11,7 @@ class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
 class USpringArmComponent;
+class UTrainerComponent;
 UCLASS()
 class INVENTORYWORKSHOP_API AMyCharacter : public ACharacter
 {
@@ -49,6 +50,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
 	UInputMappingContext* Context;
+
+	UTrainerComponent* TrainerComponent;
 private:
 	void CharacterJump(const FInputActionValue& Value);
 	void CharacterMovement(const FInputActionValue& Value);

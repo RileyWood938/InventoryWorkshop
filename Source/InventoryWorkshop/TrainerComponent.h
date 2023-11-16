@@ -8,6 +8,7 @@
 
 class APokemon;
 class Command;
+class AItem;
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INVENTORYWORKSHOP_API UTrainerComponent : public UActorComponent
 {
@@ -24,16 +25,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	int GetPokeballCount();
-	void SetPokeballCount(int NewPokeballCount);
-	int GetRareCandyCount();
-	void SetRareCandyCount(int NewRareCandyCount);
 	TArray<APokemon*>* getCapturedPokemon();
 	void SetCapturedPokemon(const TArray<APokemon*>& NewCapturedPokemon);
+	void PickupItem(AItem* NewItem);
 
 private:
-	int PokeballCount;
-	int RareCandyCount;
+	TMap<FString, int> Inventory;
 	TArray<APokemon*> CapturedPokemon;
 	TArray<Command*> ActionHistory;
 		

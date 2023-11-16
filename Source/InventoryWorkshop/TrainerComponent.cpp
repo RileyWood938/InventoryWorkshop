@@ -4,6 +4,8 @@
 #include "TrainerComponent.h"
 #include "Pokemon.h"
 #include "Command.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 
 // Sets default values for this component's properties
 UTrainerComponent::UTrainerComponent()
@@ -12,8 +14,6 @@ UTrainerComponent::UTrainerComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	PokeballCount = 0;
-	RareCandyCount = 0;
 	CapturedPokemon = TArray<APokemon*>();
 	ActionHistory = TArray<Command*>();
 }
@@ -37,26 +37,6 @@ void UTrainerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
-int UTrainerComponent::GetPokeballCount()
-{
-	return PokeballCount;
-}
-
-void UTrainerComponent::SetPokeballCount(int NewPokeballCount)
-{
-	PokeballCount = NewPokeballCount;
-}
-
-int UTrainerComponent::GetRareCandyCount()
-{
-	return RareCandyCount;
-}
-
-void UTrainerComponent::SetRareCandyCount(int NewRareCandyCount)
-{
-	RareCandyCount = NewRareCandyCount;
-}
-
 TArray<APokemon*>* UTrainerComponent::getCapturedPokemon()
 {
 	return &CapturedPokemon;
@@ -65,5 +45,18 @@ TArray<APokemon*>* UTrainerComponent::getCapturedPokemon()
 void UTrainerComponent::SetCapturedPokemon(const TArray<APokemon*>& NewCapturedPokemon)
 {
 	CapturedPokemon = NewCapturedPokemon;
+}
+
+void UTrainerComponent::PickupItem(AItem * NewItem)
+{
+	FString ItemName = UKismetSystemLibrary::GetDisplayName(Cast<UObject*>(NewItem));
+	if (Inventory.Contains(ItemName))
+	{
+		++Inventory[ItemName];
+	}
+	else 
+	{
+		Inventory.Add(ItemName, 1);
+	}
 }
 
