@@ -5,7 +5,7 @@
 #include "Pokemon.h"
 #include "Command.h"
 #include "Kismet/KismetSystemLibrary.h"
-
+#include "PokeballCommand.h"
 
 // Sets default values for this component's properties
 UTrainerComponent::UTrainerComponent()
@@ -14,8 +14,10 @@ UTrainerComponent::UTrainerComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	CapturedPokemon = TArray<APokemon*>();
-	ActionHistory = TArray<Command*>();
+	CapturedPokemon = new TArray<APokemon*>();
+	ActionHistory = new TArray<Command*>();
+	Inventory = new TMap<FString, int>();
+
 }
 
 
@@ -25,7 +27,9 @@ void UTrainerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	CapturedPokemon = new TArray<APokemon*>();
+	ActionHistory = new TArray<Command*>();
+	Inventory = new TMap<FString, int>();
 }
 
 
@@ -39,24 +43,46 @@ void UTrainerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 TArray<APokemon*>* UTrainerComponent::getCapturedPokemon()
 {
-	return &CapturedPokemon;
+	return CapturedPokemon;
 }
 
-void UTrainerComponent::SetCapturedPokemon(const TArray<APokemon*>& NewCapturedPokemon)
+void UTrainerComponent::SetCapturedPokemon(TArray<APokemon*>* NewCapturedPokemon)
 {
 	CapturedPokemon = NewCapturedPokemon;
 }
 
-void UTrainerComponent::PickupItem(AItem * NewItem)
+void UTrainerComponent::PickupItem(AItem * NewItem, FString ItemType)
 {
-	FString ItemName = UKismetSystemLibrary::GetDisplayName(Cast<UObject*>(NewItem));
-	if (Inventory.Contains(ItemName))
+
+	if (Inventory->Contains(ItemType))
 	{
-		++Inventory[ItemName];
+		int32* ValuePtr = Inventory->Find(ItemType);
+		(*ValuePtr)++;
+
 	}
 	else 
 	{
-		Inventory.Add(ItemName, 1);
+		Inventory->Add(ItemType, 1);
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ItemType);
+	FString IntString = "count: ";
+	IntString.AppendInt(*(Inventory->Find(ItemType)));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, IntString);
+	
 }
 
+void UTrainerComponent::UseItem(FString NameOfItemToUse, APokemon* Target) {
+	if (Inventory->Contains(NameOfItemToUse)) {
+
+		int32* ValuePtr = Inventory->Find(NameOfItemToUse);
+		(*ValuePtr)--;
+
+		Command* ActiveCommand;
+		if (NameOfItemToUse == "Pokeball") {
+			ActiveCommand = new PokeballCommand();
+			ActiveCommand->ExecuteCommand(Target, this);
+			ActionHistory->Push(ActiveCommand);
+		}
+	}
+}

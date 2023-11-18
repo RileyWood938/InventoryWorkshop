@@ -56,9 +56,7 @@ void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 		if (character)
 		{
-			character->TrainerComponent->PickupItem(this);
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, UKismetSystemLibrary::GetDisplayName(this));
-
+			character->TrainerComponent->PickupItem(this, UKismetSystemLibrary::GetDisplayName(this));
 		}
 	}
 }

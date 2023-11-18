@@ -26,12 +26,13 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	TArray<APokemon*>* getCapturedPokemon();
-	void SetCapturedPokemon(const TArray<APokemon*>& NewCapturedPokemon);
-	void PickupItem(AItem* NewItem);
+	void SetCapturedPokemon(TArray<APokemon*>* NewCapturedPokemon);
+	void PickupItem(AItem* NewItem, FString ItemType);
+	void UseItem(FString NameOfItemToUse, APokemon* Target);
 
 private:
-	TMap<FString, int> Inventory;
-	TArray<APokemon*> CapturedPokemon;
-	TArray<Command*> ActionHistory;
+	TMap<FString, int>* Inventory;
+	TArray<APokemon*>* CapturedPokemon;
+	TArray<Command*>* ActionHistory;
 		
 };

@@ -7,11 +7,14 @@
 /**
  * 
  */
+class APokemon;
+class UTrainerComponent;
+
 class INVENTORYWORKSHOP_API Command
 {
 public:
 	Command();
 	~Command();
-	void ExecuteCommand();
+	virtual void ExecuteCommand(APokemon* CommandTarget, UTrainerComponent* CommandUser);
 	void UnExecuteCommand();
 };

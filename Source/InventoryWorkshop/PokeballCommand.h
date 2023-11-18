@@ -8,14 +8,12 @@
 /**
  * 
  */
-class APokemon;
-class UTrainerComponent;
 class INVENTORYWORKSHOP_API PokeballCommand : public Command
 {
 public:
 	PokeballCommand();
 	~PokeballCommand();
-	void ExecuteCommand(APokemon* CommandTarget, UTrainerComponent* CommandUser);
+	virtual void ExecuteCommand(APokemon* CommandTarget, UTrainerComponent* CommandUser) override;
 	void UnExecuteCommand();
 
 private:

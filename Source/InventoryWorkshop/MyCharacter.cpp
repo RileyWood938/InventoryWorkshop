@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "TrainerComponent.h"
 
 
 
@@ -24,6 +25,8 @@ AMyCharacter::AMyCharacter()
 	// Create and attach the camera component
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);  // Attach the camera to the spring arm
+
+	TrainerComponent = CreateDefaultSubobject<UTrainerComponent>(TEXT("TrainerComponent"));
 
 }
 
