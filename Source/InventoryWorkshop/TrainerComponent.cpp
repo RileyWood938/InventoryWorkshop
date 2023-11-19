@@ -5,7 +5,10 @@
 #include "Pokemon.h"
 #include "Command.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "PokeballCommand.h"
+#include "RareCandyCommand.h"
+
 
 // Sets default values for this component's properties
 UTrainerComponent::UTrainerComponent()
@@ -73,16 +76,59 @@ void UTrainerComponent::PickupItem(AItem * NewItem, FString ItemType)
 }
 
 void UTrainerComponent::UseItem(FString NameOfItemToUse, APokemon* Target) {
-	if (Inventory->Contains(NameOfItemToUse)) {
-
-		int32* ValuePtr = Inventory->Find(NameOfItemToUse);
-		(*ValuePtr)--;
-
-		Command* ActiveCommand;
-		if (NameOfItemToUse == "Pokeball") {
-			ActiveCommand = new PokeballCommand();
-			ActiveCommand->ExecuteCommand(Target, this);
-			ActionHistory->Push(ActiveCommand);
+	if (Inventory->Contains(NameOfItemToUse)) 
+	{
+		if ((*(Inventory->Find(NameOfItemToUse))) > 0) 
+		{
+			Command* ActiveCommand;
+			if (NameOfItemToUse == "Pokeball") 
+			{
+				ActiveCommand = new PokeballCommand();
+				ActiveCommand->ExecuteCommand(Target, this);
+				ActionHistory->Push(ActiveCommand);
+			}
+			if (NameOfItemToUse == "RareCandy")
+			{
+				ActiveCommand = new RareCandyCommand();
+				ActiveCommand->ExecuteCommand(Target, this);
+				ActionHistory->Push(ActiveCommand);
+			}
 		}
 	}
+}
+
+void UTrainerComponent::UsePokeball()
+{
+	UseItem(TEXT("Pokeball"), GetNearestPokemon());
+}
+
+void UTrainerComponent::UseRareCandy()
+{
+	UseItem(TEXT("RareCandy"), GetNearestPokemon());
+}
+
+void UTrainerComponent::UndoAction() {
+	if (ActionHistory->Num() > 0) 
+	{
+		ActionHistory->Top()->UnExecuteCommand();
+		ActionHistory->Pop();
+	}
+}
+
+APokemon* UTrainerComponent::GetNearestPokemon()
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APokemon::StaticClass(), FoundActors);
+	APokemon* ClosestPokemon = nullptr;
+	float BestDistance = std::numeric_limits<float>::max();
+	for (AActor* Pokemon : FoundActors)
+	{
+
+		float ThisDistance = FVector::Dist(this->GetOwner()->GetActorLocation(), Pokemon->GetActorLocation());
+		if (ThisDistance < BestDistance) {
+			BestDistance = ThisDistance;
+			ClosestPokemon = Cast<APokemon>(Pokemon);
+		}
+	}
+	return ClosestPokemon;
 }

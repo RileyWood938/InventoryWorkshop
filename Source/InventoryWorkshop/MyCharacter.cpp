@@ -59,6 +59,9 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		enhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::CharacterJump); //binds ARunner::Move to the MoveAction UInputAction
 		enhancedInputComponent->BindAction(CharacterMovementAction, ETriggerEvent::Triggered, this, &AMyCharacter::CharacterMovement); //binds ARunner::Move to the MoveAction UInputAction
 		enhancedInputComponent->BindAction(CameraMovementAction, ETriggerEvent::Triggered, this, &AMyCharacter::CameraMovement); //binds ARunner::Move to the MoveAction UInputAction
+		enhancedInputComponent->BindAction(PokeballAction, ETriggerEvent::Triggered, TrainerComponent, &UTrainerComponent::UsePokeball); //binds ARunner::Move to the MoveAction UInputAction
+		enhancedInputComponent->BindAction(RareCandyAction, ETriggerEvent::Triggered, TrainerComponent, &UTrainerComponent::UseRareCandy); //binds ARunner::Move to the MoveAction UInputAction
+		enhancedInputComponent->BindAction(UndoAction, ETriggerEvent::Triggered, TrainerComponent, &UTrainerComponent::UndoAction); //binds ARunner::Move to the MoveAction UInputAction
 
 	}
 

@@ -16,5 +16,5 @@ public:
 	Command();
 	~Command();
 	virtual void ExecuteCommand(APokemon* CommandTarget, UTrainerComponent* CommandUser);
-	void UnExecuteCommand();
+	virtual void UnExecuteCommand();
 };

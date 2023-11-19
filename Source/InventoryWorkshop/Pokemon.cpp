@@ -39,6 +39,8 @@ bool APokemon::IsOwned()
 void APokemon::SetTrainer(UTrainerComponent* NewTrainer)
 {
 	Trainer = NewTrainer;
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("New Trainer")));
+
 }
 
 int APokemon::GetLevel()
@@ -49,5 +51,7 @@ int APokemon::GetLevel()
 void APokemon::SetLevel(int NewLevel)
 {
 	Level = NewLevel;
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("New Level %d"), NewLevel));
+
 }
 

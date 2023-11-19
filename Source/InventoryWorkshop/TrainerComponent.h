@@ -29,9 +29,16 @@ public:
 	void SetCapturedPokemon(TArray<APokemon*>* NewCapturedPokemon);
 	void PickupItem(AItem* NewItem, FString ItemType);
 	void UseItem(FString NameOfItemToUse, APokemon* Target);
+	TMap<FString, int>* Inventory;
+	
+	
+	void UsePokeball();
+	void UseRareCandy();
+	void UndoAction();
+	APokemon* GetNearestPokemon();
+
 
 private:
-	TMap<FString, int>* Inventory;
 	TArray<APokemon*>* CapturedPokemon;
 	TArray<Command*>* ActionHistory;
 		

@@ -4,15 +4,14 @@
 #include "Command.h"
 #include "CoreMinimal.h"
 
-
 /**
  * 
  */
-class INVENTORYWORKSHOP_API PokeballCommand : public Command
+class INVENTORYWORKSHOP_API RareCandyCommand : public Command
 {
 public:
-	PokeballCommand();
-	~PokeballCommand();
+	RareCandyCommand();
+	~RareCandyCommand();
 	virtual void ExecuteCommand(APokemon* CommandTarget, UTrainerComponent* CommandUser) override;
 	virtual void UnExecuteCommand() override;
 
@@ -20,5 +19,4 @@ private:
 	UTrainerComponent* User;
 	APokemon* Target;
 	bool Result;
-	UTrainerComponent* OriginalTrainer;
 };
